@@ -7,6 +7,7 @@ and using multithreading in general, so a lot of code is me experimenting.
 
 ### Controls for game:
 
+
 +E: Toggle ability to add or remove cells on mouse click
 +P: Pause game
 +R: Randomize all cells
