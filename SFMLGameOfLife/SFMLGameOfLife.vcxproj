@@ -143,9 +143,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Cell.h" />
     <ClInclude Include="CellState.h" />
     <ClInclude Include="flattenStrings.h" />

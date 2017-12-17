@@ -17,7 +17,7 @@ void parallelFor(int begin, int end, F func)
 	std::atomic<int> offset;
 	offset = begin;
 
-	for (int i = 0; i < futures.size(); i++)
+	for (size_t i = 0; i < futures.size(); i++)
 	{
 		futures[i] = std::async(std::launch::async,
 			[i, &offset, end, &func]() {
