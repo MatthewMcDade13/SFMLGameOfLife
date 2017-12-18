@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 namespace sf
 {
@@ -28,7 +29,7 @@ public:
 
 	Cell& getCell(int x, int y);
 	sf::Uint32 getCellIndex(int x, int y) const;
-	const std::vector<Cell>& getCells() const;
+	const std::vector<std::unique_ptr<Cell>>& getCells() const;
 	sf::Vector2u getCellPosition(int index) const;
 	sf::Vector2u getSize() const;
 	std::vector<enum class CellState> getCellStates() const;
@@ -55,6 +56,6 @@ private:
 	sf::Uint32 m_width;
 	sf::Uint32 m_height;
 
-	std::vector<Cell> m_cells;
+	std::vector<std::unique_ptr<Cell>> m_cells;
 };
 
