@@ -77,6 +77,12 @@
     <ClCompile Include="splitString.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="parallelFor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="flattenStrings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Font Include="Roboto-Regular.ttf">
