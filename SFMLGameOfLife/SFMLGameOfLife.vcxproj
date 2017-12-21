@@ -149,11 +149,13 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameOfLife.h" />
     <ClInclude Include="GameSpeed.h" />
+    <ClInclude Include="GetConsoleInput.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="parallelFor.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="splitString.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="StringToCase.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +163,7 @@
     <ClCompile Include="flattenStrings.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameOfLife.cpp" />
+    <ClCompile Include="GetConsoleInput.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="SFMLGameOfLife.cpp" />
     <ClCompile Include="splitString.cpp" />
@@ -170,6 +173,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="StringToCase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Roboto-Regular.ttf" />

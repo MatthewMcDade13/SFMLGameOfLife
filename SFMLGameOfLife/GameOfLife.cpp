@@ -6,6 +6,7 @@
 #include "GameSpeed.h"
 #include "ResourceManager.h"
 #include "parallelFor.h"
+#include "GetConsoleInput.h"
 //#include <ppl.h> 
 
 
@@ -20,8 +21,7 @@ GameOfLife::~GameOfLife()
 
 void GameOfLife::onGameStart()
 {
-	m_grid.setCellSize(5);
-	m_grid.setGridSize(1000, 1000);
+
 	m_grid.initGridCells();
 
 	addDrawable(&m_grid);
@@ -158,6 +158,17 @@ void GameOfLife::setGenerationDelay(const GameSpeed& gs)
 		case GameSpeed::Fast: m_genDelay = 1.5f; break;
 		case GameSpeed::Full: m_genDelay = 0.f; break;
 	}
+}
+
+void GameOfLife::setGameSettings()
+{
+	std::string errorMessage = "Invalid input, please enter a valid number";
+	int cellSize = getConsoleInputi("Enter Cell Size", errorMessage);
+	int gridWidth = getConsoleInputi("Enter Grid width", errorMessage);
+	int gridHeight = getConsoleInputi("Enter Grid height", errorMessage);
+
+	m_grid.setCellSize(cellSize);
+	m_grid.setGridSize(gridWidth, gridHeight);
 }
 
 void GameOfLife::updateCells()

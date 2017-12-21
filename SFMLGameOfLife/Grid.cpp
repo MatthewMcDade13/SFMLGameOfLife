@@ -153,6 +153,7 @@ void Grid::setGridSize(sf::Uint32 gridWidth, sf::Uint32 gridHeight)
 	m_height = gridHeight;
 }
 
+
 Cell& Grid::operator[](int cellIndex)
 {
 	return m_cells[cellIndex];

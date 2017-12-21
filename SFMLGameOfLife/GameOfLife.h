@@ -19,6 +19,8 @@ public:
 	GameOfLife();
 	~GameOfLife();
 
+	void setGameSettings();
+
 private:
 	virtual void onGameStart() override;
 
@@ -27,6 +29,7 @@ private:
 	virtual void handleInput(const sf::Event& event) override;
 
 	void setGenerationDelay(const GameSpeed& gs);
+
 
 private:
 
