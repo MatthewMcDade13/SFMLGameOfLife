@@ -1,4 +1,5 @@
-﻿#include "flattenStrings.h"
+﻿#include "stdafx.h"
+#include "flattenStrings.h"
 
 std::string flattenStrings(const std::vector<std::string> strings)
 {

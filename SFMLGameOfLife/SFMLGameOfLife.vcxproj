@@ -162,7 +162,6 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameOfLife.cpp" />
     <ClCompile Include="Grid.cpp" />
-    <ClCompile Include="parallelFor.cpp" />
     <ClCompile Include="SFMLGameOfLife.cpp" />
     <ClCompile Include="splitString.cpp" />
     <ClCompile Include="stdafx.cpp">

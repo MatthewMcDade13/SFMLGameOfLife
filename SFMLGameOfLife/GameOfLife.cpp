@@ -20,7 +20,7 @@ GameOfLife::~GameOfLife()
 
 void GameOfLife::onGameStart()
 {
-	m_grid.setCellSize(8);
+	m_grid.setCellSize(5);
 	m_grid.setGridSize(1000, 1000);
 	m_grid.initGridCells();
 
@@ -84,7 +84,7 @@ void GameOfLife::update(float deltaTime)
 		}
 	}
 
-	if (!m_bPaused && m_genClock.getElapsedTime().asSeconds() >= m_genDelay)
+	if (!m_bPaused && m_genClock.getElapsedTime().asSeconds() >= (m_genDelay * deltaTime))
 	{
 		m_genClock.restart();
 		updateCells();
@@ -151,11 +151,11 @@ void GameOfLife::setGenerationDelay(const GameSpeed& gs)
 {
 	switch (gs)
 	{
-		case GameSpeed::Slow: m_genDelay = 1.f; break;
-		case GameSpeed::SlowMedium: m_genDelay = 0.8f; break;
-		case GameSpeed::Medium: m_genDelay = 0.5f; break;
-		case GameSpeed::MediumFast: m_genDelay = 0.3f; break;
-		case GameSpeed::Fast: m_genDelay = 0.1f; break;
+		case GameSpeed::Slow: m_genDelay = 8.f; break;
+		case GameSpeed::SlowMedium: m_genDelay = 6.f; break;
+		case GameSpeed::Medium: m_genDelay = 4.5f; break;
+		case GameSpeed::MediumFast: m_genDelay = 3.f; break;
+		case GameSpeed::Fast: m_genDelay = 1.5f; break;
 		case GameSpeed::Full: m_genDelay = 0.f; break;
 	}
 }
