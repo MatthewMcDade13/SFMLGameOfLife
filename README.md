@@ -1,9 +1,7 @@
 # SFMLGameOfLife
 Conway's Game of Life made with C++ and SFML
 
-This was made for learning purposes. This is my first project using SFML
-
-and using multithreading in general, so a lot of code is me experimenting.
+This was made for learning purposes and is my first project using SFML
 
 ### Controls for game:
 
