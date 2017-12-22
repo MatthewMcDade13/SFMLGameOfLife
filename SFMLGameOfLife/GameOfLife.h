@@ -36,11 +36,10 @@ private:
 	void updateCells();
 
 	Grid m_grid;
-	//std::atomic<sf::Text> m_infoText;
-	std::atomic<bool> m_bAddCells;
-	std::atomic<bool> m_bPaused;
-	std::atomic<GameSpeed> m_gameSpeed;
-	std::atomic<float> m_genDelay;
+	bool m_bAddCells;
+	bool m_bPaused;
+	GameSpeed m_gameSpeed;
+	float m_genDelay;
 
 	sf::Clock m_genClock;
 };

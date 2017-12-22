@@ -107,7 +107,7 @@ void GameOfLife::handleInput(const sf::Event& event)
 
 		if (event.key.code == sf::Keyboard::Right)
 		{
-			GameSpeed gs = m_gameSpeed.load();
+			GameSpeed gs = m_gameSpeed;
 
 			int nextSpeed = static_cast<int>(gs);
 			nextSpeed++;
@@ -122,7 +122,7 @@ void GameOfLife::handleInput(const sf::Event& event)
 
 		if (event.key.code == sf::Keyboard::Left)
 		{
-			GameSpeed gs = m_gameSpeed.load();
+			GameSpeed gs = m_gameSpeed;
 
 			int nextSpeed = static_cast<int>(gs);
 			nextSpeed--;
@@ -174,6 +174,11 @@ void GameOfLife::setGameSettings()
 void GameOfLife::updateCells()
 {
 	std::vector<CellState>& prevStates = m_grid.getCellStates();
+
+	//for (size_t i = 0; i < m_grid.getCells().size(); i++)
+	//{
+	//	m_grid[i].update(prevStates, m_grid);
+	//}
 
 	parallelFor(0, m_grid.getCells().size(), [this, &prevStates](int i) {
 		m_grid[i].update(prevStates, m_grid);

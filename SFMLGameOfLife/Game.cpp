@@ -30,9 +30,9 @@ void Game::createWindow(const VideoMode vm, const std::string& title)
 
 void Game::start()
 {
-	m_window.setActive(false);
+	onGameStart();
 
-	std::thread renderThread(&Game::render, std::ref(*this));
+	sf::Clock clock;
 
 	while (m_window.isOpen())
 	{
@@ -45,15 +45,31 @@ void Game::start()
 			}
 
 			handleInput(event);
-
-		/*	if (event.type == sf::Event::Resized)
-			{
-				m_window.setView(sf::View(sf::FloatRect(0.f, 0.f, event.size.width, event.size.height)));
-			}*/
 		}
+
+		m_window.clear();
+
+		float elapsedTime = clock.restart().asSeconds();
+
+		if (m_bShowFPS)
+		{
+			m_window.setTitle(m_name + " - FPS: " + std::to_string(1 / elapsedTime));
+		}
+
+		update(elapsedTime);
+
+		for (size_t i = 0; i < m_drawables.size(); i++)
+		{
+			if (m_drawables[i] != nullptr)
+			{
+				m_window.draw(*(m_drawables[i]));
+			}
+		}
+
+
+		m_window.display();
 	}
 
-	renderThread.join();
 }
 
 void Game::setFPS(bool show)
@@ -68,56 +84,6 @@ void Game::addDrawable(sf::Drawable* drawable)
 
 void Game::render()
 {
-	// TODO: Find some way to be able to make a loading screen in derived class
-	// instead of here...
-	sf::Text loadingText;
-	loadingText.setFont(m_fontMan.get("./Roboto-Regular.ttf"));
-	loadingText.setString("Loading Grid...");
-	loadingText.setCharacterSize(69);
-	loadingText.setFillColor(sf::Color::White);
-	loadingText.setStyle(sf::Text::Bold);
 
-	bool bDoneLoading = false;
-
-	std::thread initThread([&bDoneLoading, this]() {
-		onGameStart();
-		bDoneLoading = true;
-	});
-	
-
-	sf::Clock clock;
-
-	while (m_window.isOpen())
-	{
-		m_window.clear();
-
-		float elapsedTime = clock.restart().asSeconds();
-
-		if (m_bShowFPS)
-		{
-			m_window.setTitle(m_name + " - FPS: " + std::to_string(1 / elapsedTime));
-		}
-
-		if (bDoneLoading == false)
-		{
-			m_window.draw(loadingText);
-		}
-		else
-		{
-			update(elapsedTime);
-
-			for (size_t i = 0; i < m_drawables.size(); i++)
-			{
-				if (m_drawables[i] != nullptr)
-				{
-					m_window.draw(*(m_drawables[i]));
-				}
-			}
-		}
-
-		m_window.display();
-	}
-
-	initThread.join();
 	
 }
