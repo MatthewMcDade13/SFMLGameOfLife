@@ -7,10 +7,12 @@
 #include "ResourceManager.h"
 #include "parallelFor.h"
 #include "GetConsoleInput.h"
+#include <memory>
 //#include <ppl.h> 
 
+using namespace std;
 
-GameOfLife::GameOfLife(): m_genDelay(0.1f), m_gameSpeed(GameSpeed::Fast), m_bAddCells(true)
+GameOfLife::GameOfLife() : m_genDelay(0.1f), m_gameSpeed(GameSpeed::Fast), m_bAddCells(true), m_grid(nullptr)
 {
 }
 
@@ -22,37 +24,13 @@ GameOfLife::~GameOfLife()
 void GameOfLife::onGameStart()
 {
 
-	m_grid.initGridCells();
+	if (m_grid == nullptr)
+	{
+		m_grid = make_unique<Grid>(1000, 1000, 8);
+		cout << "User settings not defined, resolving to default settings" << endl;
+	}
 
-	addDrawable(&m_grid);
-
-	// TODO: Make a display 'hud' for showing controls 
-	// and state of game
-
-	//sf::Text infoText;
-
-	//infoText.setFont(m_fontMan.get("./Roboto-Regular.ttf"));
-
-	//std::string info = "";
-
-	//info += "Add Cell: ON\n";
-	//info += "Speed: FAST\n\n";
-	//info += "Controls: \n";
-	//info += "E: Toggle Add/Remove Cells\n";
-	//info += "P: Pause\n";
-	//info += "<- Decrease Speed\n";
-	//info += "-> Increase Speed\n";
-	//info += "Click on cells to add/remove";
-
-	//infoText.setString(info);
-	//infoText.setCharacterSize(15);
-	//infoText.setFillColor(sf::Color(255,255,255,69));
-	//infoText.setStyle(sf::Text::Bold);
-
-	//m_infoText = infoText;
-
-
-	//addDrawable(&(m_infoText.load()));
+	addDrawable(m_grid.get());
 
 }
 
@@ -65,13 +43,13 @@ void GameOfLife::update(float deltaTime)
 		int mouseX = mousePos.x;
 		int mouseY = mousePos.y;
 
-		sf::Vector2i gridSize = (sf::Vector2i)m_grid.getSize();
+		sf::Vector2i gridSize = (sf::Vector2i)m_grid->getSize();
 
 		// Only get cell being click on if mouse click is within area of grid
 		if ((mouseX <= gridSize.x && mouseX >= 0) &&
 			mouseY <= gridSize.y && mouseY >= 0)
 		{
-			Cell& cell = m_grid.getCell(mousePos.x / m_grid.getCellSize(), mousePos.y / m_grid.getCellSize());
+			Cell& cell = m_grid->getCell(mousePos.x / m_grid->getCellSize(), mousePos.y / m_grid->getCellSize());
 
 			if (m_bAddCells)
 			{
@@ -137,12 +115,12 @@ void GameOfLife::handleInput(const sf::Event& event)
 
 		if (event.key.code == sf::Keyboard::R)
 		{
-			m_grid.randomizeCells();
+			m_grid->randomizeCells();
 		}
 
 		if (event.key.code == sf::Keyboard::C)
 		{
-			m_grid.clearCells();
+			m_grid->clearCells();
 		}
 	}
 }
@@ -167,21 +145,20 @@ void GameOfLife::setGameSettings()
 	int gridWidth = getConsoleInputi("Enter Grid width", errorMessage);
 	int gridHeight = getConsoleInputi("Enter Grid height", errorMessage);
 
-	m_grid.setCellSize(cellSize);
-	m_grid.setGridSize(gridWidth, gridHeight);
+	m_grid = make_unique<Grid>(gridWidth, gridHeight, cellSize);
 }
 
 void GameOfLife::updateCells()
 {
-	std::vector<CellState>& prevStates = m_grid.getCellStates();
+	std::vector<CellState>& prevStates = m_grid->getCellStates();
 
-	//for (size_t i = 0; i < m_grid.getCells().size(); i++)
-	//{
-	//	m_grid[i].update(prevStates, m_grid);
-	//}
+	for (size_t i = 0; i < m_grid->getCells().size(); i++)
+	{
+		(*m_grid)[i].update(prevStates, *m_grid);
+	}
 
-	parallelFor(0, m_grid.getCells().size(), [this, &prevStates](int i) {
-		m_grid[i].update(prevStates, m_grid);
-	});
+	//parallelFor(0, m_grid->getCells().size(), [this, &prevStates](int i) {
+	//	(*m_grid)[i].update(prevStates, *m_grid);
+	//});
 }
 

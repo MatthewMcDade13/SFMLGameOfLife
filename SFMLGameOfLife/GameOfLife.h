@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Grid.h"
 #include <atomic>
+#include <memory>
 
 namespace sf
 {
@@ -18,6 +19,9 @@ class GameOfLife : public Game
 public:
 	GameOfLife();
 	~GameOfLife();
+
+	GameOfLife(const GameOfLife& other) = delete;
+	GameOfLife& operator=(const GameOfLife& other) = delete;
 
 	void setGameSettings();
 
@@ -35,7 +39,7 @@ private:
 
 	void updateCells();
 
-	Grid m_grid;
+	std::unique_ptr<Grid> m_grid;
 	bool m_bAddCells;
 	bool m_bPaused;
 	GameSpeed m_gameSpeed;
