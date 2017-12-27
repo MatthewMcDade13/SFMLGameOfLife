@@ -7,12 +7,17 @@
 #include "ResourceManager.h"
 #include "parallelFor.h"
 #include "GetConsoleInput.h"
+#include "SplashScreen.h"
+#include "GameState.h"
+#include "Playing.h"
 #include <memory>
-//#include <ppl.h> 
 
 using namespace std;
 
-GameOfLife::GameOfLife() : m_genDelay(0.1f), m_gameSpeed(GameSpeed::Fast), m_bAddCells(true), m_grid(nullptr)
+GameOfLife::GameOfLife() 
+	: m_genDelay(0.1f), m_gameSpeed(GameSpeed::Fast), 
+	m_bAddCells(true), m_grid(nullptr),
+	m_stateManager(&m_context)
 {
 }
 
@@ -23,106 +28,123 @@ GameOfLife::~GameOfLife()
 
 void GameOfLife::onGameStart()
 {
+	m_stateManager.registerState<SplashScreen>(static_cast<int>(GameState::Intro));
+	m_stateManager.registerState<Playing>(static_cast<int>(GameState::Playing));
+
+	m_stateManager.pushState(static_cast<int>(GameState::Intro));
 
 	if (m_grid == nullptr)
 	{
 		m_grid = make_unique<Grid>(1000, 1000, 8);
 		cout << "User settings not defined, resolving to default settings" << endl;
 	}
-
-	addDrawable(m_grid.get());
-
 }
 
 void GameOfLife::update(float deltaTime)
 {
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-	{
-		sf::Vector2i mousePos = sf::Mouse::getPosition(getWindow());
+	m_stateManager.update(deltaTime);
+	m_stateManager.draw();
+	//if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	//{
+	//	sf::Vector2i mousePos = sf::Mouse::getPosition(getWindow());
 
-		int mouseX = mousePos.x;
-		int mouseY = mousePos.y;
+	//	int mouseX = mousePos.x;
+	//	int mouseY = mousePos.y;
 
-		sf::Vector2i gridSize = (sf::Vector2i)m_grid->getSize();
+	//	sf::Vector2i gridSize = (sf::Vector2i)m_grid->getSize();
 
-		// Only get cell being click on if mouse click is within area of grid
-		if ((mouseX <= gridSize.x && mouseX >= 0) &&
-			mouseY <= gridSize.y && mouseY >= 0)
-		{
-			Cell& cell = m_grid->getCell(mousePos.x / m_grid->getCellSize(), mousePos.y / m_grid->getCellSize());
+	//	// Only get cell being click on if mouse click is within area of grid
+	//	if ((mouseX <= gridSize.x && mouseX >= 0) &&
+	//		mouseY <= gridSize.y && mouseY >= 0)
+	//	{
+	//		Cell& cell = m_grid->getCell(mousePos.x / m_grid->getCellSize(), mousePos.y / m_grid->getCellSize());
 
-			if (m_bAddCells)
-			{
-				cell.birth();
-			}
-			else
-			{
-				cell.die();
-			}
-		}
-	}
+	//		if (m_bAddCells)
+	//		{
+	//			cell.birth();
+	//		}
+	//		else
+	//		{
+	//			cell.die();
+	//		}
+	//	}
+	//}
 
-	if (!m_bPaused && m_genClock.getElapsedTime().asSeconds() >= (m_genDelay * deltaTime))
-	{
-		m_genClock.restart();
-		updateCells();
-	}
+	//if (!m_bPaused && m_genClock.getElapsedTime().asSeconds() >= (m_genDelay * deltaTime))
+	//{
+	//	m_genClock.restart();
+	//	updateCells();
+	//}
+
+	//getWindow().draw(*m_grid);
 }
 
 void GameOfLife::handleInput(const sf::Event& event)
 {
 	if (event.type == sf::Event::KeyReleased)
 	{
-		if (event.key.code == sf::Keyboard::E)
+		if (event.key.code == sf::Keyboard::Space)
 		{
-			m_bAddCells = !m_bAddCells;
+			m_stateManager.pushState(static_cast<int>(GameState::Playing));
 		}
 
-		if (event.key.code == sf::Keyboard::P)
+		if (event.key.code == sf::Keyboard::A)
 		{
-			m_bPaused = !m_bPaused;
-		}
-
-		if (event.key.code == sf::Keyboard::Right)
-		{
-			GameSpeed gs = m_gameSpeed;
-
-			int nextSpeed = static_cast<int>(gs);
-			nextSpeed++;
-			if (nextSpeed <= static_cast<int>(GameSpeed::Full))
-			{
-				gs++;
-				m_gameSpeed = gs;
-			}
-
-			setGenerationDelay(m_gameSpeed);
-		}
-
-		if (event.key.code == sf::Keyboard::Left)
-		{
-			GameSpeed gs = m_gameSpeed;
-
-			int nextSpeed = static_cast<int>(gs);
-			nextSpeed--;
-			if (nextSpeed >= static_cast<int>(GameSpeed::Slow))
-			{
-				gs--;
-				m_gameSpeed = gs;
-			}
-
-			setGenerationDelay(m_gameSpeed);
-		}
-
-		if (event.key.code == sf::Keyboard::R)
-		{
-			m_grid->randomizeCells();
-		}
-
-		if (event.key.code == sf::Keyboard::C)
-		{
-			m_grid->clearCells();
+			m_stateManager.pushState(static_cast<int>(GameState::Intro));
 		}
 	}
+	//if (event.type == sf::Event::KeyReleased)
+	//{
+	//	if (event.key.code == sf::Keyboard::E)
+	//	{
+	//		m_bAddCells = !m_bAddCells;
+	//	}
+
+	//	if (event.key.code == sf::Keyboard::P)
+	//	{
+	//		m_bPaused = !m_bPaused;
+	//	}
+
+	//	if (event.key.code == sf::Keyboard::Right)
+	//	{
+	//		GameSpeed gs = m_gameSpeed;
+
+	//		int nextSpeed = static_cast<int>(gs);
+	//		nextSpeed++;
+	//		if (nextSpeed <= static_cast<int>(GameSpeed::Full))
+	//		{
+	//			gs++;
+	//			m_gameSpeed = gs;
+	//		}
+
+	//		setGenerationDelay(m_gameSpeed);
+	//	}
+
+	//	if (event.key.code == sf::Keyboard::Left)
+	//	{
+	//		GameSpeed gs = m_gameSpeed;
+
+	//		int nextSpeed = static_cast<int>(gs);
+	//		nextSpeed--;
+	//		if (nextSpeed >= static_cast<int>(GameSpeed::Slow))
+	//		{
+	//			gs--;
+	//			m_gameSpeed = gs;
+	//		}
+
+	//		setGenerationDelay(m_gameSpeed);
+	//	}
+
+	//	if (event.key.code == sf::Keyboard::R)
+	//	{
+	//		m_grid->randomizeCells();
+	//	}
+
+	//	if (event.key.code == sf::Keyboard::C)
+	//	{
+	//		m_grid->clearCells();
+	//	}
+	//}
 }
 
 void GameOfLife::setGenerationDelay(const GameSpeed& gs)

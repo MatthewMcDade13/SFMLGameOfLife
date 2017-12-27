@@ -1,7 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "ResourceManager.h"
+#include "ResourceHolder.h"
+#include "SharedContext.h"
 
 namespace sf
 {
@@ -16,6 +17,8 @@ namespace sf
 
 template<typename T>
 class ResourceManager;
+
+struct ResourceHolder;
 
 class Game
 {
@@ -35,9 +38,9 @@ public:
 	void setFPS(bool show);
 
 protected:
-	ResourceManager<sf::Texture> m_textureMan;
-	ResourceManager<sf::Font> m_fontMan;
-	ResourceManager<sf::Image> m_imageMan;
+	ResourceHolder m_resources;
+	SharedContext m_context;
+
 
 	virtual void onGameStart() = 0;
 
@@ -45,13 +48,9 @@ protected:
 
 	virtual void handleInput(const sf::Event& event) = 0;
 
-	void addDrawable(sf::Drawable* drawable);
-
 private:
-	void render();
 
 	sf::RenderWindow m_window;
-	std::vector<sf::Drawable*> m_drawables;
 	std::string m_name;
 	bool m_bShowFPS;
 

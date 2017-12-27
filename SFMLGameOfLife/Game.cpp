@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "Grid.h"
 #include "Cell.h"
+#include "ResourceHolder.h"
 
 #include <thread>
 #include <exception>
@@ -9,7 +10,7 @@
 using sf::VideoMode;
 using sf::RenderWindow;
 
-Game::Game()
+Game::Game() : m_context({ &m_resources }), m_resources()
 {
 }
 
@@ -26,6 +27,7 @@ void Game::createWindow(const VideoMode vm, const std::string& title)
 {
 	m_name = title;
 	m_window.create(vm, title);
+	m_context.window = &m_window;
 }
 
 void Game::start()
@@ -58,15 +60,6 @@ void Game::start()
 
 		update(elapsedTime);
 
-		for (size_t i = 0; i < m_drawables.size(); i++)
-		{
-			if (m_drawables[i] != nullptr)
-			{
-				m_window.draw(*(m_drawables[i]));
-			}
-		}
-
-
 		m_window.display();
 	}
 
@@ -77,13 +70,3 @@ void Game::setFPS(bool show)
 	m_bShowFPS = show;
 }
 
-void Game::addDrawable(sf::Drawable* drawable)
-{
-	m_drawables.push_back(drawable);
-}
-
-void Game::render()
-{
-
-	
-}

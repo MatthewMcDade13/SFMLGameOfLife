@@ -2,6 +2,7 @@
 
 #include "Game.h"
 #include "Grid.h"
+#include "StateManager.h"
 #include <atomic>
 #include <memory>
 
@@ -13,6 +14,7 @@ namespace sf
 }
 
 enum class GameSpeed;
+class StateManager;
 
 class GameOfLife : public Game
 {
@@ -40,9 +42,11 @@ private:
 	void updateCells();
 
 	std::unique_ptr<Grid> m_grid;
+	GameSpeed m_gameSpeed;
+	StateManager m_stateManager;
+
 	bool m_bAddCells;
 	bool m_bPaused;
-	GameSpeed m_gameSpeed;
 	float m_genDelay;
 
 	sf::Clock m_genClock;

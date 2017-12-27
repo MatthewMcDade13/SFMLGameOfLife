@@ -13,11 +13,11 @@
 int main()
 {
 	GameOfLife game;
-	game.setGameSettings();
+	//game.setGameSettings();
 	game.createWindow(sf::VideoMode(1920, 1080), "Game Of Life");
 	game.setFPS(true);	
 	game.start();
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 
