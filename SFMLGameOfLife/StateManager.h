@@ -10,6 +10,7 @@ struct SharedContext;
 namespace sf
 {
 	class RenderWindow;
+	class Event;
 }
 
 class State;
@@ -22,6 +23,9 @@ public:
 
 	// Gets Current shared context
 	SharedContext* getContext();
+
+	// Gets state at top of stack, null if empty
+	State* getCurrentState();
 
 	// Registers a state with a given factory function to be "lazy loaded" at runtime.
 	// Requires a factory function to be called when lazy loaded, 
@@ -55,6 +59,8 @@ public:
 
 	// Updates current state and all transcendant states beneath it if current state is transcendant
 	void update(float deltaTime);
+
+	void handleInput(const sf::Event& event);
 
 private:
 	sf::RenderWindow* m_window;

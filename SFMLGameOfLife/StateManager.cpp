@@ -21,6 +21,13 @@ SharedContext* StateManager::getContext()
 	return m_context;
 }
 
+State* StateManager::getCurrentState()
+{
+	if (m_states.empty()) return nullptr;
+
+	return m_states.back().second.get();
+}
+
 void StateManager::registerState(int typeId, function<unique_ptr<State>(StateManager*)> stateFactory)
 {
 	m_stateFactory.emplace(typeId, stateFactory);
@@ -145,6 +152,15 @@ void StateManager::update(float deltaTime)
 		// otherwise just update state at top of stack.
 		m_states.back().second->update(deltaTime);
 	}
+}
+
+void StateManager::handleInput(const sf::Event & event)
+{
+	if (m_states.empty()) return;
+
+	State* currentState = m_states.back().second.get();
+
+	currentState->handleInput(event);
 }
 
 bool StateManager::createState(int typeId)

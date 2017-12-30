@@ -72,6 +72,7 @@ Grid& Grid::operator=(const Grid& right)
 	{
 		m_cells[i] = make_unique<Cell>(*right.m_cells[i]);
 	}
+	return *this;
 }
 
 Cell& Grid::getCell(int x, int y)

@@ -1,7 +1,10 @@
 ﻿#pragma once
 
-enum class GameState : int
+namespace GameState
 {
-	Intro = 0,
-	Playing = 1
-};
+	enum
+	{
+		Intro = 1,
+		Playing = 2
+	};
+}

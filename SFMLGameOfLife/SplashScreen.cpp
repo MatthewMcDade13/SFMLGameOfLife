@@ -2,9 +2,16 @@
 #include "SplashScreen.h"
 #include "StateManager.h"
 #include "SharedContext.h"
+#include "GameState.h"
+#include "PlayState.h"
+#include "ToUnderlying.h"
+#include "GetConsoleInput.h"
+#include "GameSettings.h"
 
+using namespace std;
 
-SplashScreen::SplashScreen(StateManager* manager): State(manager)
+SplashScreen::SplashScreen(StateManager* manager, GameSettings* settings)
+	: State(manager), m_settings(settings)
 {
 }
 
@@ -24,31 +31,51 @@ void SplashScreen::draw(sf::RenderWindow & window)
 
 void SplashScreen::activate()
 {
-	std::cout << "Activating SplashScreen" << std::endl;
+	std::string message = "Cell Size: " + to_string(m_settings->cellSize) + "\n";
+	message += "Grid Width: " + to_string(m_settings->gridWidth) + "\n";
+	message += "Grid Height: " + to_string(m_settings->gridHeight) + "\n";
+	m_text.setString(message);
+
+	const SharedContext* const context = m_stateManager->getContext();
+
+	m_text.setOrigin(sf::Vector2f(m_text.getLocalBounds().width / 2, m_text.getLocalBounds().height / 2));
+
+	sf::Vector2u windowSize = context->window->getSize();
+	m_text.setPosition(windowSize.x / 2.f, windowSize.y / 2.f);
 }
 
 void SplashScreen::deactivate()
 {
-	std::cout << "Deactivating SplashScreen" << std::endl;
+
 }
 
 void SplashScreen::onCreate()
 {
-	SharedContext* context = m_stateManager->getContext();
-	sf::Font& font = context->resources->fontManager.get("./Roboto-Regular.ttf");
+	const SharedContext* const context = m_stateManager->getContext();
+	const sf::Font& font = context->resources->fontManager.get("./Roboto-Regular.ttf");
 	m_text.setFont(font);
-	m_text.setString("AYYY LMAO ITS LIT AF FAM");
 	m_text.setFillColor(sf::Color::White);
 	m_text.setCharacterSize(50);
 	m_text.setStyle(sf::Text::Bold);
-	m_text.setOrigin(sf::Vector2f(m_text.getLocalBounds().width / 2, m_text.getLocalBounds().height / 2));
 
-	sf::Vector2u windowSize = context->window->getSize();
-
-	m_text.setPosition(windowSize.x / 2.f, windowSize.y / 2.f);
+	const std::string errorMessage = "Invalid input, please enter a valid number";
+	m_settings->cellSize = getConsoleInputi("Enter Cell Size", errorMessage);
+	m_settings->gridWidth = getConsoleInputi("Enter Grid width", errorMessage);
+	m_settings->gridHeight = getConsoleInputi("Enter Grid height", errorMessage);
 }
 
 void SplashScreen::onDestroy()
 {
 	std::cout << "Destroying SplashScreen" << std::endl;
+}
+
+void SplashScreen::handleInput(const sf::Event& event)
+{
+	if (event.type == sf::Event::KeyReleased)
+	{
+		if (event.key.code == sf::Keyboard::Space)
+		{
+			m_stateManager->pushState(GameState::Playing);
+		}
+	}
 }

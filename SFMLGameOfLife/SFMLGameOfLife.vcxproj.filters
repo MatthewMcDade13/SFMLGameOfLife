@@ -78,7 +78,16 @@
     <ClInclude Include="GameState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Playing.h">
+    <ClInclude Include="PlayState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ToUnderlying.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSettings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -128,7 +137,10 @@
     <ClCompile Include="ResourceHolder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Playing.cpp">
+    <ClCompile Include="PlayState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

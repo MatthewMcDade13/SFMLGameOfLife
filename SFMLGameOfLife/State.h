@@ -3,6 +3,7 @@
 namespace sf
 {
 	class RenderWindow;
+	class Event;
 }
 
 class StateManager;
@@ -38,6 +39,9 @@ public:
 
 	// Called when state is destroyed from state manager.
 	virtual void onDestroy() = 0;
+
+	// Handle input related to state here
+	virtual void handleInput(const sf::Event& event) = 0;
 
 protected:
 	bool m_bTransparent;

@@ -145,15 +145,17 @@
   <ItemGroup>
     <ClInclude Include="Cell.h" />
     <ClInclude Include="CellState.h" />
+    <ClInclude Include="EventManager.h" />
     <ClInclude Include="flattenStrings.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameOfLife.h" />
+    <ClInclude Include="GameSettings.h" />
     <ClInclude Include="GameSpeed.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GetConsoleInput.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="parallelFor.h" />
-    <ClInclude Include="Playing.h" />
+    <ClInclude Include="PlayState.h" />
     <ClInclude Include="ResourceHolder.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="SharedContext.h" />
@@ -164,15 +166,17 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StringToCase.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="ToUnderlying.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="flattenStrings.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameOfLife.cpp" />
     <ClCompile Include="GetConsoleInput.cpp" />
     <ClCompile Include="Grid.cpp" />
-    <ClCompile Include="Playing.cpp" />
+    <ClCompile Include="PlayState.cpp" />
     <ClCompile Include="ResourceHolder.cpp" />
     <ClCompile Include="SFMLGameOfLife.cpp" />
     <ClCompile Include="SharedContext.cpp" />
