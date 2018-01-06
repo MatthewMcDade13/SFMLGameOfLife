@@ -40,6 +40,16 @@ void GameOfLife::update(float deltaTime)
 
 void GameOfLife::handleInput(const sf::Event& event)
 {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
+	{
+		m_stateManager.pushState(GameState::Intro);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+	{
+		m_stateManager.pushState(GameState::Playing);
+	}
+
+
 	m_stateManager.handleInput(event);
 }
 

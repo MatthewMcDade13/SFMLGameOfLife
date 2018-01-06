@@ -172,6 +172,7 @@ bool StateManager::createState(int typeId)
 
 	unique_ptr<State> newState = it->second(this);
 	newState->onCreate();
+
 	m_states.emplace_back(typeId, move(newState));
 	return true;
 }

@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="Cell.h" />
     <ClInclude Include="CellState.h" />
+    <ClInclude Include="Entity.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="flattenStrings.h" />
     <ClInclude Include="Game.h" />
@@ -170,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="flattenStrings.cpp" />
     <ClCompile Include="Game.cpp" />
