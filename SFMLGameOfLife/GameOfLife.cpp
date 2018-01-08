@@ -15,7 +15,8 @@
 using namespace std;
 
 GameOfLife::GameOfLife()
-	: m_stateManager(&m_context), m_settings({0,0,0})
+	: m_stateManager(&m_context), 
+	m_settings({0,0,0})
 {
 }
 
@@ -32,10 +33,14 @@ void GameOfLife::onGameStart()
 	m_stateManager.pushState(GameState::Intro);
 }
 
+void GameOfLife::draw()
+{
+	m_stateManager.draw();
+}
+
 void GameOfLife::update(float deltaTime)
 {
 	m_stateManager.update(deltaTime);
-	m_stateManager.draw();
 }
 
 void GameOfLife::handleInput(const sf::Event& event)

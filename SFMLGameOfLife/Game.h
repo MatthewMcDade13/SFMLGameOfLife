@@ -13,6 +13,7 @@ namespace sf
 	class Texture;
 	class Font;
 	class Image;
+	class Time;
 }
 
 template<typename T>
@@ -37,12 +38,18 @@ public:
 
 	void setFPS(bool show);
 
+	void setFrameTime(float framesPerSecond);
+
+	void setUseFixedTimeStep(bool shouldUseTimeStep);
+
 protected:
 	ResourceHolder m_resources;
 	SharedContext m_context;
 
 
 	virtual void onGameStart() = 0;
+
+	virtual void draw() = 0;
 
 	virtual void update(float deltaTime) = 0;
 
@@ -53,6 +60,11 @@ private:
 	sf::RenderWindow m_window;
 	std::string m_name;
 	bool m_bShowFPS;
+	bool m_bUseFixedTimeStep;
+	sf::Time m_timePerFrame;
+
+	void processInput();
+	void render();
 
 };
 

@@ -30,6 +30,8 @@ public:
 private:
 	virtual void onGameStart() override;
 
+	virtual void draw() override;
+
 	virtual void update(float deltaTime) override;
 
 	virtual void handleInput(const sf::Event& event) override;

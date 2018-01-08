@@ -25,3 +25,4 @@ sf::Vector2f Entity::getVelocity() const
 {
 	return m_velocity;
 }
+

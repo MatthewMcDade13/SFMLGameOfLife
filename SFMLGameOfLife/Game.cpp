@@ -10,7 +10,12 @@
 using sf::VideoMode;
 using sf::RenderWindow;
 
-Game::Game() : m_context({ &m_resources }), m_resources()
+Game::Game() : 
+	m_context({ &m_resources }), 
+	m_resources(),
+	m_bShowFPS(false),
+	m_bUseFixedTimeStep(true),
+	m_timePerFrame(sf::seconds(1.f / 120.f))
 {
 }
 
@@ -35,32 +40,36 @@ void Game::start()
 	onGameStart();
 
 	sf::Clock clock;
+	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
 	while (m_window.isOpen())
 	{
-		sf::Event event;
-		while (m_window.pollEvent(event))
+		processInput();
+
+		if (m_bUseFixedTimeStep)
 		{
-			if (event.type == sf::Event::Closed)
+			timeSinceLastUpdate += clock.restart();
+			while (timeSinceLastUpdate >= m_timePerFrame)
 			{
-				m_window.close();
+				timeSinceLastUpdate -= m_timePerFrame;
+				processInput();
+				update(m_timePerFrame.asSeconds());
 			}
 
-			handleInput(event);
+			render();
 		}
-
-		m_window.clear();
-
-		float elapsedTime = clock.restart().asSeconds();
+		else
+		{
+			timeSinceLastUpdate = clock.restart();
+			update(timeSinceLastUpdate.asSeconds());
+			render();
+		}
 
 		if (m_bShowFPS)
 		{
-			m_window.setTitle(m_name + " - FPS: " + std::to_string(1 / elapsedTime));
+			m_window.setTitle(m_name + " - FPS: " + std::to_string(1 / timeSinceLastUpdate.asSeconds()));
 		}
 
-		update(elapsedTime);
-
-		m_window.display();
 	}
 
 }
@@ -68,5 +77,36 @@ void Game::start()
 void Game::setFPS(bool show)
 {
 	m_bShowFPS = show;
+}
+
+void Game::setFrameTime(float framesPerSecond)
+{
+	m_timePerFrame = sf::seconds(1.f / framesPerSecond);
+}
+
+void Game::setUseFixedTimeStep(bool shouldUseTimeStep)
+{
+	m_bUseFixedTimeStep = shouldUseTimeStep;
+}
+
+void Game::processInput()
+{
+	sf::Event event;
+	while (m_window.pollEvent(event))
+	{
+		if (event.type == sf::Event::Closed)
+		{
+			m_window.close();
+		}
+
+		handleInput(event);
+	}
+}
+
+void Game::render()
+{
+	m_window.clear();
+	draw();
+	m_window.display();
 }
 

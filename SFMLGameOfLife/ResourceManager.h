@@ -2,6 +2,7 @@
 #pragma once
 
 #include "stdafx.h"
+#include <assert.h>
 #include <unordered_map>
 #include <iterator>
 #include <memory>
@@ -11,8 +12,6 @@
 template<typename T>
 class ResourceManager
 {
-protected:
-	std::unordered_map<std::string, std::unique_ptr<T>> m_resources;
 
 public:
 	ResourceManager() { };
@@ -20,35 +19,67 @@ public:
 
 	T& get(const std::string& filePath)
 	{
+
+		{
+			T* existingResource = findResource(filePath);
+
+			if (existingResource) return *existingResource;
+		}
+
+		unique_ptr<T> resource = make_unique<T>();
+
+		resource->loadFromFile(filePath);
+
+		return insertResource(filePath, move(resource));
+	}
+
+	// Used to handle loading shaders or for calling other resource loadFromFileOverloads that take
+	// two parameters.
+	template <typename Param>
+	T& get(const std::string& filePath, const Param& secondParam)
+	{
+		using namespace std; using namespace sf;
+
+		{
+			T* existingResource = findResource(filePath);
+
+			if (existingResource) return *existingResource;
+		}
+
+		unique_ptr<T> resource = make_unique<T>();
+
+		resource->loadFromFile(filePath, secondParam);
+
+		return insertResource(filePath, move(resource));
+	}
+
+protected:
+	std::unordered_map<std::string, std::unique_ptr<T>> m_resources;
+
+private:
+	T& insertResource(const std::string& filePath, std::unique_ptr<T> resource)
+	{
+		using namespace std; using namespace sf;
+		// Store refrence to resource before we move the pointer
+		// into the map so we can return it
+		T& resourceRef = *resource;
+
+		auto inserted = m_resources.insert(pair<string, unique_ptr<T>>(filePath, move(resource)));
+
+		assert(inserted.second);
+
+		return resourceRef;
+	}
+
+	T* findResource(const std::string& filePath)
+	{
 		using namespace std; using namespace sf;
 
 		auto it = m_resources.find(filePath);
 
 		if (it != m_resources.end())
-			return *(it->second);
+			return it->second.get();
 
-		auto loadFile = fromFile<T>(filePath);
-		unique_ptr<T> resource(new T());
-
-		loadFile(*resource);
-
-		// Store refrence to resource before we move the pointer
-		// into the map so we can return it
-		T& resourceRef = *resource;
-
-		m_resources.insert(pair<string, unique_ptr<T>>(filePath, std::move(resource)));
-
-		return resourceRef;
-	}
-
-private:
-	template <class R>
-	std::function<bool(R&)> fromFile(const std::string& filePath)
-	{
-		return std::function<bool(R&)>(
-			[&](R& resource) {
-			bool result = resource.loadFromFile(filePath);
-			return result;
-		});
+		return nullptr;
 	}
 };
