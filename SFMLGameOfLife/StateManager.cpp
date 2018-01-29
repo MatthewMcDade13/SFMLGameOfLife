@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "StateManager.h"
 #include "State.h"
-#include "SharedContext.h"
+#include "Context.h"
 
 using namespace std;
 
-StateManager::StateManager(SharedContext* context)
+StateManager::StateManager(Context* context)
 	: m_states(vector<pair<int, unique_ptr<State>>>()), 
 	m_stateFactory(unordered_map<int, function<unique_ptr<State>(StateManager*)>>()),
 	m_context(context)
@@ -16,7 +16,7 @@ StateManager::~StateManager()
 {
 }
 
-SharedContext* StateManager::getContext()
+Context* StateManager::getContext()
 {
 	return m_context;
 }
@@ -26,6 +26,12 @@ State* StateManager::getCurrentState()
 	if (m_states.empty()) return nullptr;
 
 	return m_states.back().second.get();
+}
+
+int StateManager::getCurrentStateId() const
+{
+	if (m_states.empty()) return -1;
+	return m_states.back().first;
 }
 
 void StateManager::registerState(int typeId, function<unique_ptr<State>(StateManager*)> stateFactory)

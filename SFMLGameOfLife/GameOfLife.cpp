@@ -20,7 +20,6 @@ GameOfLife::GameOfLife()
 {
 }
 
-
 GameOfLife::~GameOfLife()
 {
 }

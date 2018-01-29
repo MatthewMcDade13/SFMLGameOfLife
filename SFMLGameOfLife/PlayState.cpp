@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "PlayState.h"
 #include "StateManager.h"
-#include "SharedContext.h"
+#include "Context.h"
 #include "GameSettings.h"
 #include "Grid.h"
 #include "Cell.h"
@@ -76,6 +76,7 @@ void PlayState::onCreate()
 
 void PlayState::onDestroy()
 {
+
 }
 
 void PlayState::handleInput(const sf::Event & event)

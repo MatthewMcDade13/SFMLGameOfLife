@@ -5,7 +5,7 @@
 #include <memory>
 #include <functional>
 
-struct SharedContext;
+struct Context;
 
 namespace sf
 {
@@ -18,14 +18,16 @@ class State;
 class StateManager
 {
 public:
-	StateManager(SharedContext* context);
+	StateManager(Context* context);
 	~StateManager();
 
 	// Gets Current shared context
-	SharedContext* getContext();
+	Context* getContext();
 
 	// Gets state at top of stack, null if empty
 	State* getCurrentState();
+
+	int getCurrentStateId() const;
 
 	// Registers a state with a given factory function to be "lazy loaded" at runtime.
 	// Requires a factory function to be called when lazy loaded, 
@@ -68,7 +70,7 @@ private:
 
 	std::unordered_map<int, std::function<std::unique_ptr<State>(StateManager*)>> m_stateFactory;
 
-	SharedContext* m_context;
+	Context* m_context;
 
 	bool createState(int typeId);
 };

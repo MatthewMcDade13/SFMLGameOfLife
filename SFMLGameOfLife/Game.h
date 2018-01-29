@@ -2,7 +2,7 @@
 
 #include <vector>
 #include "ResourceHolder.h"
-#include "SharedContext.h"
+#include "Context.h"
 
 namespace sf
 {
@@ -44,8 +44,7 @@ public:
 
 protected:
 	ResourceHolder m_resources;
-	SharedContext m_context;
-
+	Context m_context;
 
 	virtual void onGameStart() = 0;
 

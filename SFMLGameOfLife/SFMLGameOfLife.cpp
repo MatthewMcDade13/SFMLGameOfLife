@@ -14,7 +14,8 @@ int main()
 {
 	GameOfLife game;
 	game.createWindow(sf::VideoMode(1920, 1080), "Game Of Life");
-	game.setFPS(true);	
+	game.setFPS(true);
+	//game.setUseFixedTimeStep(false);
 	game.start();
 
 	return EXIT_SUCCESS;

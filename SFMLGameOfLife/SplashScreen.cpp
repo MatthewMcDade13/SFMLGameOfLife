@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "SplashScreen.h"
 #include "StateManager.h"
-#include "SharedContext.h"
+#include "Context.h"
 #include "GameState.h"
 #include "PlayState.h"
 #include "ToUnderlying.h"
@@ -36,7 +36,7 @@ void SplashScreen::activate()
 	message += "Grid Height: " + to_string(m_settings->gridHeight) + "\n";
 	m_text.setString(message);
 
-	const SharedContext* const context = m_stateManager->getContext();
+	const Context* const context = m_stateManager->getContext();
 
 	m_text.setOrigin(sf::Vector2f(m_text.getLocalBounds().width / 2, m_text.getLocalBounds().height / 2));
 
@@ -51,7 +51,7 @@ void SplashScreen::deactivate()
 
 void SplashScreen::onCreate()
 {
-	const SharedContext* const context = m_stateManager->getContext();
+	const Context* const context = m_stateManager->getContext();
 	const sf::Font& font = context->resources->fontManager.get("./Roboto-Regular.ttf");
 	m_text.setFont(font);
 	m_text.setFillColor(sf::Color::White);
